@@ -4,16 +4,18 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class CensusData {
     public static void main(String[] args) {
         URL censusUrl = null;
         BufferedReader in = null;
         String inputLine;
-        Surname sName = new Surname("",0,0);
         int count = 0;
         // Create a HashMap object called surnames
-        HashMap<String, Surname> surnames = new HashMap<String, Surname>();
+        HashMap<String, Surname> surNameHashMap = new HashMap<String, Surname>();
 
         try {
             censusUrl = new URL("https://www2.census.gov/topics/genealogy/1990surnames/dist.all.last");
@@ -21,17 +23,15 @@ public class CensusData {
                     new InputStreamReader(censusUrl.openStream()));
             while ((inputLine = in.readLine()) != null) {
                 // System.out.println(inputLine);
-                sName.setFields(inputLine);
-                System.out.println(sName.getSurname() + " " + sName.getFrequency() + " " + sName.getRank());
-                count++;
-                // now write hash
-                surnames.put(sName.getSurname(), sName);
-                // if (count == 5)
-                //    break;
+                Surname anotherSurNameObject = new Surname("",0,0);
+                // use object method to parse inputLine and populate object properties
+                anotherSurNameObject.setFields(inputLine);
+                // count++;
+                surNameHashMap.put(anotherSurNameObject.getSurname(), anotherSurNameObject);
+                // anotherSurNameObject.printSurname();
             }
             in.close();
-            System.out.println("lines = " + count);
-
+            // System.out.println("lines = " + count);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -43,7 +43,7 @@ public class CensusData {
             FileOutputStream fileOut =
                     new FileOutputStream("./surname.dat");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(surnames);
+            out.writeObject(surNameHashMap);
             out.close();
             fileOut.close();
             System.out.println("Serialized data is saved in ./surname.dat");
@@ -51,25 +51,5 @@ public class CensusData {
             i.printStackTrace();
         }
         // now read the file again
-
-        try {
-            FileInputStream fileIn = new FileInputStream("./surname.dat");
-            ObjectInputStream inFile = new ObjectInputStream(fileIn);
-            surnames = (HashMap) inFile.readObject();
-            inFile.close();
-            fileIn.close();
-            // pull out names from surnames
-            Surname newsName = (Surname) surnames.get("SMITH");
-            System.out.println("deserialized size is " + surnames.size());
-            System.out.println("data: "+ newsName.getSurname() + " " + newsName.getFrequency() + " " + newsName.getRank());
-        } catch (IOException i) {
-            i.printStackTrace();
-            return;
-        } catch (ClassNotFoundException c) {
-            System.out.println("Employee class not found");
-            c.printStackTrace();
-            return;
-        }
-
     }
 }
