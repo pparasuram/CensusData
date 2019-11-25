@@ -5,7 +5,7 @@ public class Surname implements java.io.Serializable{
     private double frequency;
     private int rank;
 
-    public Surname(String surname, int frequency, int rank) {
+    public Surname(String surname, double frequency, int rank) {
         this.surname = surname;
         this.frequency = frequency;
         this.rank = rank;
@@ -41,5 +41,8 @@ public class Surname implements java.io.Serializable{
         setFrequency(Double.parseDouble(surnameDataArray[1]));
         setRank(Integer.parseInt(surnameDataArray[3]));
 
+    }
+    public void printSurname(){
+        System.out.println(this.getSurname() + " " + this.getFrequency() + " " + this.getRank());
     }
 }
