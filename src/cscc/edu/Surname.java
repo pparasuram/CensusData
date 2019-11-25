@@ -43,6 +43,6 @@ public class Surname implements java.io.Serializable{
 
     }
     public void printSurname(){
-        System.out.println(this.getSurname() + " " + this.getFrequency() + " " + this.getRank());
+        System.out.println(this.getSurname() + " frequency: " + this.getFrequency() + "% rank: " + this.getRank());
     }
 }
